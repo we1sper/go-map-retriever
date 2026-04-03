@@ -46,7 +46,7 @@ func main() {
 
 ## Navigation Rules
 
-- `Get(...)` walks through nested maps one key at a time.
+- `Get(...)` walks through nested maps by key(s).
 - `At(...)` walks through slices or arrays by index.
 - Negative indexes are supported in `At(...)`, so `At(-1)` means the last item.
 - `Head()` is shorthand for `At(0)`.
@@ -94,7 +94,7 @@ Typical output shape:
 
 ```text
 source.get(details).get(job).get(salary)
-source.get(details).get(job).get(salary).
+source.get(details).get(job).get(salary)
         x
         |
         cannot get value for key details: key not found in map

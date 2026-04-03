@@ -298,11 +298,13 @@ func (m *MapRetriever) Trace() string {
 
 func (m *MapRetriever) Debug() string {
 	pos := 0
-	trace := ""
+	trace := m.from
 	rootCause := ""
 
 	for current := m; current != nil; current = current.parent {
-		trace = current.from + "." + trace
+		if current != m {
+			trace = current.from + "." + trace
+		}
 		if current.err != nil && (current.parent == nil || current.parent.err == nil) {
 			rootCause = current.err.Error()
 			pos = len(trace) - 1
