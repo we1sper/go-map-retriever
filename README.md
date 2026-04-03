@@ -12,7 +12,7 @@ package main
 import (
     "fmt"
 
-    "github.com/we1sper/go-map-retriever/mapretriever"
+    "github.com/we1sper/go-map-retriever"
 )
 
 func main() {
