@@ -355,10 +355,10 @@ func (m *MapRetriever) at(index int) *MapRetriever {
 		index += length
 	}
 
-	if index >= length {
-		child.err = fmt.Errorf("%d out of bounds: parent length is %d", index, length)
-	} else {
+	if index >= 0 && index < length {
 		child.raw = raw.Index(index).Interface()
+	} else {
+		child.err = fmt.Errorf("%d out of bounds: parent length is %d", index, length)
 	}
 
 	return child
