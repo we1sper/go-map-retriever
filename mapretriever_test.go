@@ -37,6 +37,7 @@ func TestMapRetriever(t *testing.T) {
 
 	fmt.Println(retriever.Get("emails").At(10).Trace())
 	fmt.Println(retriever.Get("emails").At(10).Debug())
+	fmt.Println(retriever.Get("emails").At(10).Error())
 	fmt.Println(retriever.Get("emails").At(10).Unsafe().String())
 
 	fmt.Println(retriever.Get("emails").Head().Trace())
@@ -50,6 +51,11 @@ func TestMapRetriever(t *testing.T) {
 	fmt.Println(retriever.Get("details", "job", "company").Trace())
 	fmt.Println(retriever.Get("details", "job", "company").Debug())
 	fmt.Println(retriever.Get("details", "job", "company").Unsafe().String())
+
+	fmt.Println(retriever.Get("details", "job", "location", "city").Trace())
+	fmt.Println(retriever.Get("details", "job", "location", "city").Debug())
+	fmt.Println(retriever.Get("details", "job", "location", "city").Error())
+	fmt.Println(retriever.Get("details", "job", "location", "city").Unsafe().String())
 
 	fmt.Println(retriever.Get("others", 1).Trace())
 	fmt.Println(retriever.Get("others", 1).Debug())

@@ -279,7 +279,12 @@ func (m *MapRetriever) Success() bool {
 }
 
 func (m *MapRetriever) Error() error {
-	return m.err
+	for cursor := m; cursor != nil; cursor = cursor.parent {
+		if cursor.err != nil && (cursor.parent == nil || cursor.parent.err == nil) {
+			return cursor.err
+		}
+	}
+	return nil
 }
 
 func (m *MapRetriever) Value() any {

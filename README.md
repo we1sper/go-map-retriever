@@ -98,5 +98,5 @@ source.get(details).get(job).get(salary)
         x
         |
         cannot get value for key details: key not found in map
-cannot get value for key salary: parent is nil
+cannot get value for key details: key not found in map
 ```
