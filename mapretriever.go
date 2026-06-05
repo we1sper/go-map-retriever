@@ -134,6 +134,29 @@ func (m *MapRetriever) Get(keys ...any) *MapRetriever {
 	return next
 }
 
+func (m *MapRetriever) Fetch(path ...any) *MapRetriever {
+	next := m
+
+	for _, segment := range path {
+		switch v := segment.(type) {
+		case int:
+			next = next.at(v)
+		case int8:
+			next = next.at(int(v))
+		case int16:
+			next = next.at(int(v))
+		case int32:
+			next = next.at(int(v))
+		case int64:
+			next = next.at(int(v))
+		default:
+			next = next.get(v)
+		}
+	}
+
+	return next
+}
+
 func (m *MapRetriever) Head() *MapRetriever {
 	return m.at(0)
 }

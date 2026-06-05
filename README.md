@@ -48,7 +48,8 @@ func main() {
 
 - `Get(...)` walks through nested maps by key(s).
 - `At(...)` walks through slices or arrays by index.
-- Negative indexes are supported in `At(...)`, so `At(-1)` means the last item.
+- `Fetch(...)` walks through a mixed path — integer arguments (including `int8`, `int16`, `int32`, `int64`) are treated as slice/array indices, everything else is treated as a map key. It is a convenience that combines `Get` and `At` so you don't have to switch between them manually.
+- Negative indexes are supported in `At(...)` and `Fetch(...)`, so `At(-1)` and `Fetch(-1)` mean the last item.
 - `Head()` is shorthand for `At(0)`.
 - `Tail()` is shorthand for `At(-1)`.
 
