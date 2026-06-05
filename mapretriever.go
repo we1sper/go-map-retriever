@@ -3,6 +3,7 @@ package mapretriever
 import (
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -155,6 +156,43 @@ func (m *MapRetriever) Fetch(path ...any) *MapRetriever {
 	}
 
 	return next
+}
+
+func parsePath(path string) []any {
+	segments := make([]any, 0)
+
+	i := 0
+	for i < len(path) {
+		switch path[i] {
+		case '.':
+			i++
+
+		case '[':
+			i++
+			start := i
+			for i < len(path) && path[i] >= '0' && path[i] <= '9' {
+				i++
+			}
+			if i < len(path) && path[i] == ']' {
+				num, _ := strconv.Atoi(path[start:i])
+				segments = append(segments, num)
+				i++
+			}
+
+		default:
+			start := i
+			for i < len(path) && path[i] != '.' && path[i] != '[' {
+				i++
+			}
+			segments = append(segments, path[start:i])
+		}
+	}
+
+	return segments
+}
+
+func (m *MapRetriever) Path(path string) *MapRetriever {
+	return m.Fetch(parsePath(path)...)
 }
 
 func (m *MapRetriever) Head() *MapRetriever {

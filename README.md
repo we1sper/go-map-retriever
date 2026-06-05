@@ -17,30 +17,45 @@ import (
 
 func main() {
     data := map[string]interface{}{
-        "author":  "welsper",
-        "country": "China",
-        "emails": []string{
-            "welsper@qq.com",
-            "welsper@nit.com",
-            "welsper@nekomi.com",
+        "name": "alpha",
+        "meta": map[string]interface{}{
+            "region": "north",
+            "nested": map[string]string{
+                "keyA": "valA",
+            },
+        },
+        "tags": []string{
+            "red",
+            "green",
+            "blue",
         },
     }
 
     r := mapretriever.NewMapRetriever(data)
 
-    author, err := r.Get("author").String()
+    // safe access
+    name, err := r.Get("name").String()
     if err != nil {
-        fmt.Printf("retrieving author failed: %v\n", err)
+        fmt.Printf("retrieving name failed: %v\n", err)
     } else {
-        fmt.Printf("author: %s\n", author)
+        fmt.Printf("name: %s\n", name)
     }
 
-    country := r.Get("country").Unsafe().String()
-    fmt.Printf("country: %s\n", country)
+    // unsafe access
+    region := r.Get("meta", "region").Unsafe().String()
+    fmt.Printf("region: %s\n", region)
 
-    for i, e := range r.Get("emails").Unsafe().ValueSlice() {
-        fmt.Printf("email %d: %s\n", i, e.Unsafe().String())
+    // iterate a slice
+    for i, e := range r.Get("tags").Unsafe().ValueSlice() {
+        fmt.Printf("tag %d: %s\n", i, e.Unsafe().String())
     }
+
+    // string-based path (dot notation and bracket indices)
+    val := r.Path("meta.nested.keyA").Unsafe().String()
+    fmt.Printf("nested keyA: %s\n", val)
+
+    firstTag := r.Path("tags[0]").Unsafe().String()
+    fmt.Printf("first tag: %s\n", firstTag)
 }
 ```
 
@@ -50,6 +65,7 @@ func main() {
 - `At(...)` walks through slices or arrays by index.
 - `Fetch(...)` walks through a mixed path — integer arguments (including `int8`, `int16`, `int32`, `int64`) are treated as slice/array indices, everything else is treated as a map key. It is a convenience that combines `Get` and `At` so you don't have to switch between them manually.
 - Negative indexes are supported in `At(...)` and `Fetch(...)`, so `At(-1)` and `Fetch(-1)` mean the last item.
+- `Path(...)` accepts a string in dot/bracket notation and delegates to `Fetch`. Use dots to separate map keys and `[n]` for slice indices: `"meta.nested.keyA"` → `Fetch("meta", "nested", "keyA")`, `"tags[0]"` → `Fetch("tags", 0)`, `"grid[1][2]"` → `Fetch("grid", 1, 2)`. This is convenient when the navigation path is known as a literal string.
 - `Head()` is shorthand for `At(0)`.
 - `Tail()` is shorthand for `At(-1)`.
 
